@@ -1,0 +1,22 @@
+name: Testing
+on: push
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Prebuilt-MPR APT repository
+        uses: makedeb/setup-makedeb@main
+        with:
+          makedeb-repo: false
+          pbmpr-repo: true
+      - name: Get update targets
+        id: update-targets
+        uses: ./.github/workflows/get-update-targets
+        with:
+          pkgbase: celeste
+          makedeb_url: makedeb.org
+      - name: Print info
+        run: echo "${{ steps.update-targets.outputs.targets }}" | jq
